@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<title>Graphiques de données</title>
+		<link rel="icon" href="neige.ico" />
+	</head>
+	<body class="right-sidebar">
+		<div id="page-wrapper">
+
+				<div id="header">
+
+						<div class="inner">
+							<header>
+								<h1><pre><a href="right-sidebar.html" id="logo"style="font-size:55px;">Relevé température |</a><a href="Page d'acc.html" id="logo"style="font-size:55px;"> Page d'accueil  | </a> <a href="right-sidebar3.html" id="logo"style="font-size:55px;">Relevé hauteur de neige </a></pre></h1>
+							</header>
+						</div>
+
+				</div>
+			<center><pre><h2 style="font-size:45px;">Mesure de l'Humidité</h2><p style="font-size:20px;">   Humidité en (%)</p></pre></center>
+			<p><pre>   Les relevées de température, d'humidité et de hauteur de neige sont éffectué à 1042m (station) et 3275m (sommet)</pre> </p>
+			<div class="app">
+
+			<button v-on:click="changeData">Humidité sommet</button>
+			<line-chart :data="dataChart" :options="{responsive: true, maintainAspectRatio: false}"></line-chart>
+			  
+			 </div>
+
+			 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js"></script>
+			
+			 <script src="https://unpkg.com/vue-chartjs@2.5.7-rc3/dist/vue-chartjs.full.min.js"></script>
+
+	</body>
+</html>
+
+<script>
+ 
+	Vue.component("line-chart", {
+	 extends: VueChartJs.Line,
+	 props: ["data", "options"],
+	 mounted() {
+	   this.renderLineChart();
+	 },
+	 computed: {
+	   chartData: function() {
+		 return this.data;
+	   }
+	 },
+	 methods: {
+	   renderLineChart: function() {
+	   this.renderChart(
+		 {
+		   labels: ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"],
+		   datasets: [
+			 {
+			   label: 'Unfilled',
+			   fill: false,
+			   label: "Humidité en %",
+			   backgroundColor: "#093EE7",
+			   borderColor: "#093EE7",
+			   data: this.chartData
+			 }
+		   ]
+		 },
+		 { responsive: true, maintainAspectRatio: false }
+	   );      
+	   }
+	 },
+	 watch: {
+	   data: function() {
+		 this._chart.destroy();
+		
+		 this.renderLineChart();
+	   }
+	 }
+   });
+   
+   var vm = new Vue({
+	 el: ".app",
+	 data: {
+	   dataChart: [93, 74, 54, 76, 43, 90, 85],
+	 },
+	 methods: {
+	   changeData: function() {
+		 this.dataChart = [79, 86, 87, 75, 70, 69, 77];
+	   }
+	 }
+   });
+	
+	</script>
